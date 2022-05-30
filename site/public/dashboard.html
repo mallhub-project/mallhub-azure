@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <title> MallHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <script src="js/dashboard.js"></script>
+  <script src="js/grafico.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+
+  <!--FERRAMENTA HELPDESK FRESHWORK-->
+  <script>
+    window.fwSettings = {
+      'widget_id': 73000003138
+    };
+    !function () { if ("function" != typeof window.FreshworksWidget) { var n = function () { n.q.push(arguments) }; n.q = [], window.FreshworksWidget = n } }() 
+  </script>
+  <script type='text/javascript' src='https://widget.freshworks.com/widgets/73000003138.js' async defer></script>
+</head>
+
+<body onload="validarSessao(), listarDispositivo(), showAlerta(false), obterDadosGrafico(sessionStorage.ID_SHOPPING), quantidadeDispositivo(), showAlertaDashboard()">
+  <div class="container">
+    <div class="painel">
+      <div class="conteudo">
+        <div class=" mallhubImage"><img src="img/imgens-dashboard/f_mallhub.svg" alt=""></div>
+        <div onclick="Inicio()" id="inicioNavbar">
+          <img class="inicioIcon" id="inicioIcon" src="img/imgens-dashboard/f_inicio.svg" alt="Inicio">
+          <div style="cursor: pointer;">Inicio</div>
+        </div>
+        <div onclick="Dispositivos()" id="dispositivoNavbar">
+          <img class="dispositivoIcon" id="dispositivoIcon" src="img/imgens-dashboard/f_dispositivos.svg"
+            alt="Dispositivos">
+          <div style="cursor: pointer;">Dispositivos</div>
+        </div>
+        <div onclick="Perfil()" id="perfilNavbar">
+          <img class="perfilIcon" id="perfilIcon" src="img/imgens-dashboard/f_perfil.svg" alt="Perfil">
+          <div style="cursor: pointer;">Perfil</div>
+        </div>
+        <div onclick="Acessos()" id="acessosNavbar">
+          <img class="acessoIcon" id="acessoIcon" src="img/imgens-dashboard/f_acessos.svg" alt="Acessos">
+          <div style="cursor: pointer;">Acessos</div>
+        </div>
+        <div onclick="ajuda()" id="ajudaNavbar">
+          <img class="acessoIcon" id="ajudaIcon" src="img/imgens-dashboard/f_help.svg" alt="Acessos">
+          <div style="cursor: pointer;">Orientações</div>
+        </div>
+      </div>
+      <div onclick="loggout()" class="loggout">
+        <img src="img/imgens-dashboard/f_logout.svg" alt="Log Out">
+        <div style="cursor: pointer;">Log Out</div>
+      </div>
+    </div>
+
+    <div class="meio">
+      <div class="navbar">
+        <div class=" direita">
+          <div class="sino">
+            <img onclick="showAlerta(true)" src="img/imgens-dashboard/f_notificaçao.svg" alt="Ver alertas">
+            <div onclick="showAlerta(true)" class="notificaçao" id="quantidadeAlertas">0</div>
+
+            <div id="idShowAlerta" class="modalAlerta" style="display: none;">
+              <div class="navAlerta">
+                <button onclick="hideAlerta()">X</button>
+              </div>
+              <div id="listarAlerta"></div>
+            </div>
+          </div>
+          <div class="shoping" id="nomeShopping"></div>
+          <div><img src="img/imgens-dashboard/f_mallhub-icon.svg" alt="Logo mallhub" style="border-radius: 100px;">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div id="divInicio">
+          <div class="metricas">
+            <div class="d_ativos">
+              <div>Dispositivos Ativos:<span id="qtd_dispositivos_ativos">0</span></div>
+              <div>(Dispositivos ativos no sistema)</div>
+            </div>
+            <div class="d_alerta">
+              <div>Dispositivos Em Alerta:<span id="qtd_dispositivo_alerta">0</span></div>
+              <div>(Abaixo da média estipulada)</div>
+            </div>
+            <div class="d_ideais">
+              <div>Dispositivos Ideais:<span id="qtd_dispositivo_ideal">0</span></div>
+              <div>(Acima da média estipulada)</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="containerGrafico">
+              <div class="tituloGraficos">
+                <p>Fluxo de Pessoas por Dia:</p>
+              </div>
+
+              <div class="containerGraficoChart">
+                <div class="grafico">
+                  <div id="graficoTodosDispositivos">
+                    <canvas id="todosDispositivos" class="canvas1"></canvas>
+                  </div>
+                  <div id="graficoTodosSetores" style="display: none;">
+                    <canvas id="porSetores" class="canvas1"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="containerGrafico">
+              <div id="graficoPorDispositivos">
+                <div class="tituloGraficos">
+                  <p>Fluxo de Pessoas por Mês:</p>
+                </div>
+                <div class="containerGraficoChart">
+                  <div class="grafico">
+                    <canvas id="porDispositivos" class="canvas1"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div id="graficoPorSetor" style="display: none;">
+                <div class="tituloGraficos">
+                  <p>Perspectiva Individual por setor</p>
+                </div>
+                <div class="containerGraficoChart">
+                  <div class="grafico">
+                    <canvas id="variacaoPorSetor" class="canvas1"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="divDispositivos" class="dash_dispositivos" style="display: none;">
+          <div id="modalNovoDispositivo" style="display: none;">
+            <div class="buttonClose" onclick="novoDispositivo()">X</div>
+            <div class="box">
+              <h2>Nome Dispositivo:</h2>
+              <input class="dash_input_info" id="nome_dispositivo" placeholder="Nome">
+
+              <h2>Descrição do Dispositivo:</h2>
+              <input class="dash_input_info" id="descricao_dispositivo" placeholder="Descrição">
+
+              <h2>Localidade</h2>
+              <select id="localidadesDispositivo">
+              </select>
+            </div>
+            <button onclick="criar_dispositivo()" id="botao_salvarDispositivo">Salvar Dispositivo</button>
+          </div>
+
+          <div id="modalEditarDispositivo" style="display: none;">
+            <div class="buttonClose" onclick="fecharModalEditar()">X</div>
+            <div class="box">
+              <h2>Nome Dispositivo:</h2>
+              <input class="dash_input_info" id="nome_dispositivo_editar" placeholder="Nome">
+
+              <h2>Descrição do Dispositivo:</h2>
+              <input class="dash_input_info" id="descricao_dispositivo_editar" placeholder="Descrição">
+
+              <h2>Localidade</h2>
+              <select id="localidadesDispositivo_editar">
+              </select>
+            </div>
+            <button onclick="openModalEditar()" id="botao_salvarDispositivo_editar">Salvar Dispositivo</button>
+          </div>
+
+          <div id="modalCriarSetor" style="display: none;">
+            <div onclick="fecharCriarSetor()" class="buttonClose" style="margin-left: auto;">X</div>
+            <h2 style="margin-right: auto;">Nome do setor:</h2>
+            <input class="dash_input_info" id="nome_setor" placeholder="Nome">
+            <h2 style="margin-right: auto;">Descrição do setor:</h2>
+            <input class="dash_input_info" id="descricao_setor" placeholder="Descrição">
+            <button onclick="cadastrarSetor()" id="botao_salvarDispositivo">Salvar Setor</button>
+          </div>
+
+          <div id="modalCriarLocalidade" style="display: none; margin-bottom: 50px;">
+            <div onclick="fecharCriarLocalidade()" class="buttonClose" style="margin-left: auto;">X</div>
+            <h2 style="margin-right: auto;">Nome da localidade:</h2>
+            <input class="dash_input_info" id="nome_localidade" placeholder="Nome">
+
+            <h2 style="margin-right: auto;">Descrição da localidade:</h2>
+            <input class="dash_input_info" id="descricao_localidade" placeholder="Descrição">
+
+            <h2 style="margin-right: auto;">Setor</h2>
+            <select id="setor_localidade_select"></select>
+
+            <button onclick="cadastrarLocalidade()" id="botao_salvarDispositivo">Salvar Localidade</button>
+          </div>
+
+          <div class="dash_topo">
+            <h1 class="dash_h1">Seus Dispositivos</h1>
+            <button onclick="novoDispositivo()">Novo Dispositivo</button>
+          </div>
+
+          <div id="buttonsLocalidadesetor">
+            <button onclick="criarSetor()">Adicionar setor</button>
+            <button onclick="criarLocalidade()">Adicionar localidade</button>
+          </div>
+
+          <div id="listaDispositivos"></div>
+        </div>
+
+        <div id="divPerfil" style="display: none;">
+          <div class="dash_perfil">
+            <div class="dash_topo">
+              <h1 class="dash_h1">Informações do shopping</h1>
+            </div>
+            <div class="dash_novo_dispositivo">
+              <label for="cnpjPerfil">CNPJ</label>
+              <input class="dash_input_info" id="cnpjPerfil" placeholder="CNPJ">
+              <label for="fantasyNamePerfil">Nome fantasia</label>
+              <input class="dash_input_info" id="fantasyNamePerfil" placeholder="Nome Fantasia">
+              <label for="razaoSocialPerfil">Razão social</label>
+              <input class="dash_input_info" id="razaoSocialPerfil" placeholder="Razão Social">
+              <div class="button_save">
+                <button onclick="salvarShopping()">Salvar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash_perfil">
+            <div class="dash_topo">
+              <h1 class="dash_h1">Informações do usuario</h1>
+            </div>
+            <div class="dash_novo_dispositivo">
+              <label for="nomePerfil">Nome</label>
+              <input class="dash_input_info" id="nomePerfil" placeholder="Nome">
+              <label for="cpfPerfil">CPF</label>
+              <input class="dash_input_info" id="cpfPerfil" placeholder="CPF">
+              <label for="emailPerfil">Email</label>
+              <input class="dash_input_info" disabled id="emailPerfil" placeholder="Email">
+              <label for="telefonePerfil">Telefone</label>
+              <input class="dash_input_info" id="telefonePerfil" placeholder="Telefone">
+              <label for="cargoPerfil">Cargo</label>
+              <input class="dash_input_info" id="cargoPerfil" placeholder="Cargo">
+              <div class="button_save">
+                <button onclick="salvarUsuario()">Salvar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="divAcessos" style="display: none;">
+          <div id="modalNovoAcesso" style="display: none;">
+            <button class="buttonClose" onclick="fecharNovoAcesso()">x</button>
+            <div class="box">
+              <h2>Nome:</h2>
+              <input class="dash_input_info" id="nome_acesso" placeholder="Nome">
+
+              <h2>Email:</h2>
+              <input class="dash_input_info" id="email_acesso" placeholder="Email">
+
+              <h2>CPF:</h2>
+              <input class="dash_input_info" id="CPF_acesso" placeholder="CPF">
+
+              <h2>Cargo:</h2>
+              <input class="dash_input_info" id="cargo_acesso" placeholder="Cargo">
+
+              <h2>Senha:</h2>
+              <input class="dash_input_info" id="senha_acesso" placeholder="Senha">
+            </div>
+            <button onclick="cadastrarAcesso()" id="botao_salvarAcesso">Salvar Acesso</button>
+          </div>
+          <div class="dashs">
+            <div class="dash_esquerda_acesso">
+              <div class="dash_topo">
+                <div class="dash_h1">Novo acesso</div>
+                <div class="botaoNewAcess">
+                  <button onclick="abriModalAcesso()" class="botaoNovoAcesso">Novo Acesso</button>
+                </div>
+              </div>
+              <div>
+                <div id="listarAcesso_lista" style="display: flex; flex-direction: column;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="divAjuda" style="display: none;">
+          <div>
+            <h1>Precisando de ajuda?</h1>
+            <img width="900px" src="img/imgens-dashboard/orientacao.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
