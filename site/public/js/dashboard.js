@@ -847,7 +847,8 @@ async function showAlertaDashboard() {
   var dispositivo_bom = 0
   var dispositivo_otimo = 0
 
-  await fetch(`/aviso/listar-metricas`)
+  var id_shopping = sessionStorage.ID_SHOPPING
+  await fetch(`/aviso/listar-metricas?idShopping=${id_shopping}`)
     .then(data => data.json()).then((data) => {
       if (data.length) {
         lista_de_dispositivo = data
@@ -856,7 +857,7 @@ async function showAlertaDashboard() {
       console.log(e)
     });
 
-  if (lista_de_dispositivo.length == 3) {
+  if (lista_de_dispositivo.length > 0) {
     for (var posicao = 0; posicao < lista_de_dispositivo.length; posicao++) {
       var fk_dispositivo = lista_de_dispositivo[posicao].id_dispositivo
       var fk_tipoAlerta = 0

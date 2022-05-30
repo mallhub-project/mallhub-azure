@@ -44,7 +44,8 @@ function cadastrar(req, res) {
 }
 
 function acharMetricasDispositivo(req, res) {
-    avisoModel.acharMetricasDispositivo()
+    var id_shopping = req.query.idShopping
+    avisoModel.acharMetricasDispositivo(id_shopping)
     .then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);

@@ -14,7 +14,7 @@ function buscarUltimasMedidas(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar as ultimas medidas (ultimasMedidas).", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
@@ -27,7 +27,6 @@ function buscarMedidasEmTempoReal(req, res) {
     console.log(`Recuperando medidas em tempo real`);
 
     medidaModel.buscarMedidasEmTempoReal(id_shopping).then(function (resultado) {
-        console.log(resultado)
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -35,7 +34,7 @@ function buscarMedidasEmTempoReal(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar as ultimas medidas (medidasTempoReal)", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }
@@ -45,11 +44,8 @@ function buscarMedidasPorMes(req, res) {
     var data_Inicial = req.query.dataInicial;
     var data_final = req.query.dataFinal
 
-    console.log(id_shopping, data_Inicial, data_final)
-
     medidaModel.buscarMedidasPorMes(id_shopping, data_Inicial, data_final)
     .then(function (resultado) {
-        console.log(resultado)
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -57,7 +53,7 @@ function buscarMedidasPorMes(req, res) {
         }
     }).catch(function (erro) {
         console.log(erro);
-        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        console.log("Houve um erro ao buscar as ultimas medidas (medidasMes)", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });
 }

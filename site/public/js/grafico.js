@@ -11,10 +11,10 @@ function obterDadosGrafico(id_shopping) {
     if (response.ok) {
       response.json().then(function (resposta) {
         fetch(`/medidas/buscar-mes?idShopping=1&dataInicial=2022-06-01&dataFinal=2022-06-30`)
-        .then(data => data.json())
-        .then((data) => {
-          plotarGrafico(resposta, id_shopping, data[0].TotalPessoas);
-        })
+          .then(data => data.json())
+          .then((data) => {
+            plotarGrafico(resposta, id_shopping, data[0].TotalPessoas);
+          })
       });
     } else {
       console.error('Nenhum dado encontrado ou erro na API');
@@ -67,7 +67,7 @@ function plotarGrafico(resposta, id_shopping, dadosMes) {
       scales: {
         y: {
           beginAtZero: true,
-          max: 1000
+          max: 20000
         }
       }
     }
@@ -79,10 +79,8 @@ function plotarGrafico(resposta, id_shopping, dadosMes) {
     config
   );
 
-  console.log(resposta)
 
   for (i = 0; i < resposta.length; i++) {
-    console.log("aquii 2", resposta[i])
     var registro = resposta[i];
     if (i == 0 || i == 2) {
       data.datasets[i].data.push(registro.TotalPessoas * 10);
@@ -90,23 +88,6 @@ function plotarGrafico(resposta, id_shopping, dadosMes) {
       data.datasets[i].data.push(registro.TotalPessoas);
     }
   }
-
-  // for (i = 0; i < 6; i++) {
-  //   console.log(i, "aquii")
-  //   var registro = resposta[i];
-  //   data.datasets[0].data.push(registro);
-  // }
-
-  // for (i = 0; i < 6; i++) {
-  //   var registro = resposta[i];
-  //   data.datasets[1].data.push(registro);
-  // }
-
-  // for (i = 0; i < 6; i++) {
-  //   var registro = resposta[i];
-  //   data.datasets[2].data.push(registro);
-  // }
-
 
   const labels2 = [
     'Janeiro',
@@ -134,7 +115,7 @@ function plotarGrafico(resposta, id_shopping, dadosMes) {
       (Math.random() * 1000).toFixed(0),
       (Math.random() * 1000).toFixed(0),
       (Math.random() * 1000).toFixed(0),
-      dadosMes],
+        dadosMes],
     }]
   };
   const config2 = {
@@ -162,16 +143,15 @@ function atualizarGrafico(id_shopping, data, myChart, data2, myChart2) {
   fetch(`/medidas/tempo-real/${id_shopping}`, { cache: 'no-store' }).then(function (response) {
     if (response.ok) {
       response.json().then(function (novoRegistro) {
-       
-         console.log("aquii", novoRegistro)
 
-        console.log("aquii, ",data.datasets[0])
+        console.log("novo registro do tempo real", novoRegistro)
+
         data.datasets[0].data.length > 6 ? data.datasets[0].data.shift() : null
-        data.datasets[0].data.push(novoRegistro[0].TotalPessoas * 20);
+        data.datasets[0].data.push(novoRegistro[0].TotalPessoas * 10);
         data.datasets[1].data.length > 6 ? data.datasets[1].data.shift() : null
-        data.datasets[1].data.push(novoRegistro[1].TotalPessoas);
+        data.datasets[1].data.push(novoRegistro[1].TotalPessoas * 200);
         data.datasets[2].data.length > 6 ? data.datasets[2].data.shift() : null
-        data.datasets[2].data.push(novoRegistro[2].TotalPessoas * 10);
+        data.datasets[2].data.push(novoRegistro[2].TotalPessoas * 1200);
 
         window.myChart.update();
 
@@ -184,13 +164,13 @@ function atualizarGrafico(id_shopping, data, myChart, data2, myChart2) {
       console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
     });
 
-    fetch(`/medidas/buscar-mes?idShopping=1&dataInicial=2022-06-01&dataFinal=2022-06-30`)
+  fetch(`/medidas/buscar-mes?idShopping=1&dataInicial=2022-06-01&dataFinal=2022-06-30`)
     .then(data => data.json())
     .then((novoRegistro) => {
-        data2.datasets[0].data[5] = novoRegistro[0].TotalPessoas
-        window.myChart2.update();
+      data2.datasets[0].data[5] = novoRegistro[0].TotalPessoas
+      window.myChart2.update();
     })
 
-    proximaAtualizacao = setTimeout(() => atualizarGrafico(id_shopping, data, null, data2), 2000);
+  proximaAtualizacao = setTimeout(() => atualizarGrafico(id_shopping, data, null, data2), 2000);
 
 }
