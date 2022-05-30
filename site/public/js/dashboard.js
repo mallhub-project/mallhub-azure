@@ -637,12 +637,12 @@ function cadastrarAcesso() {
   var nome = nome_acesso.value
   var email = email_acesso.value
   var cpf = CPF_acesso.value
+  var cargo = input_cargo.value
   var senha = senha_acesso.value
-  var cargo = cargo_acesso.value
   var fk_superior = sessionStorage.ID_USUARIO
   var fk_shopping = sessionStorage.ID_SHOPPING
 
-  if (nome.length, email.length, cpf.length == 11, senha.length, fk_superior, fk_shopping) {
+  if (nome.length, email.length, cpf.length = 11, senha.length, fk_superior, fk_shopping) {
     fetch("/acesso/cadastrar", {
       method: "POST",
       headers: {
@@ -658,7 +658,7 @@ function cadastrarAcesso() {
         fk_shoppingServer: fk_shopping
       })
     }).then(function (resposta) {
-      if (resposta.status == 200 || resposta.status == 204) {
+      if (resposta.ok) {
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -669,19 +669,6 @@ function cadastrarAcesso() {
         Toast.fire({
           icon: 'success',
           title: 'Acesso cadastrado com sucesso!'
-        })
-        modalCriarSetor.style.display = 'none'
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1500,
-          timerProgressBar: true,
-        })
-        Toast.fire({
-          icon: 'error',
-          title: 'Acesso não cadastrado!'
         })
         modalCriarSetor.style.display = 'none'
       }
