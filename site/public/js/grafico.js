@@ -67,7 +67,7 @@ function plotarGrafico(resposta, id_shopping, dadosMes) {
       scales: {
         y: {
           beginAtZero: true,
-          max: 20000
+          max: 8000
         }
       }
     }
