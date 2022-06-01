@@ -33,7 +33,7 @@ function cadastrar(req, res) {
     } else {
         setorModel.cadastrar(nome, descricao, id_shopping)
             .then(function (resultado) {
-                if (resultado.length > 0) {
+                if (resultado) {
                     res.status(200).json(resultado);
                 } else {
                     res.status(204).send("Nenhum resultado encontrado!")
@@ -63,7 +63,7 @@ function editar(req, res) {
     } else {
         setorModel.editar(id_setor, nome, descricao)
             .then(function (resultado) {
-                if (resultado.length > 0) {
+                if (resultado) {
                     res.status(200).json(resultado);
                 } else {
                     res.status(204).send("Nenhum resultado encontrado!")
@@ -83,10 +83,8 @@ function apagar(req, res) {
 
     setorModel.apagar(id_setor)
     .then(function (resultado) {
-        if (resultado.length > 0) {
+        if (resultado) {
             res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
         }
     }).catch(
         function (erro) {

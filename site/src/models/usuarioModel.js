@@ -9,6 +9,7 @@ function entrar(email, senha) {
 }
 
 async function cadastrar(nome, cnpj, razaoSocial, fantasyName, email, password, tellphone, cep, state, cidade, logradouro, number) {
+    console.log('chamei no cadastro shopping')
     var instrucao = `
         INSERT INTO shopping (razao_social, nome_fantasia, cnpj, cep, estado, cidade, logradouro, numero) VALUES ('${razaoSocial}', '${fantasyName}', '${cnpj}', '${cep}', '${state}', '${cidade}', '${logradouro}', '${number}');
     `;
@@ -50,24 +51,21 @@ async function listarShopping(idShopping) {
     var instrucao = `
         SELECT * FROM shopping WHERE id_shopping = ${idShopping};
     `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
     return await database.executar(instrucao);
 }
 
-function salvarUsuario(nome, cpf, telefone, cargo, idUsuario) {
+async function salvarUsuario(nome, cpf, telefone, cargo, idUsuario) {
     var instrucao = `
         UPDATE usuario SET nome = '${nome}', cpf = '${cpf}', telefone = '${telefone}', cargo = '${cargo}' WHERE id_usuario = ${idUsuario};
     `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
-    return database.executar(instrucao);
+    return await database.executar(instrucao);
 }
 
-function salvarShopping(razao_social, nome_fantasia, cnpj, idShopping) {
+async function salvarShopping(razao_social, nome_fantasia, cnpj, idShopping) {
     var instrucao = `
     UPDATE shopping SET razao_social = '${razao_social}', nome_fantasia = '${nome_fantasia}', cnpj = '${cnpj}' WHERE id_shopping = ${idShopping};
     `;
-    console.log("Executando a instrução SQL: \n" + instrucao);
-    return database.executar(instrucao);
+    return await database.executar(instrucao);
 }
 
 function validaremail(email) {

@@ -299,7 +299,7 @@ function criar_dispositivo() {
         localidadeServer: localidade
       })
     }).then(function (resposta) {
-      if (resposta.status == 200) {
+      if (resposta.ok) {
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -364,7 +364,7 @@ function deleteDispositivo(id_dispositivo) {
           id_dispositivoServer: id_dispositivo
         })
       }).then(function (resposta) {
-        if (resposta.status == 200) {
+        if (resposta.ok) {
           Swal.fire(
             'OK!',
             'Dispositivo excluido com sucesso!',
@@ -469,7 +469,7 @@ function editDispositivo(id_dispositivo) {
       localidadeServer: localidade
     })
   }).then(function (resposta) {
-    if (resposta.status == 200) {
+    if (resposta.ok) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -713,7 +713,8 @@ function cadastrarSetor() {
       idShoppingServer: shopping
     })
   }).then(function (resposta) {
-    if (resposta.status == 200 || resposta.status == 204) {
+    console.log(resposta)
+    if (resposta.ok) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -783,7 +784,7 @@ function cadastrarLocalidade() {
       idSetorServer: setor
     })
   }).then(function (resposta) {
-    if (resposta.status == 200 || resposta.status == 204) {
+    if (resposta.ok) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',

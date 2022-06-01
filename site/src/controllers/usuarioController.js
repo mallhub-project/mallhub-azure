@@ -74,7 +74,6 @@ function cadastrar(req, res) {
     var logradouro = req.body.logradouroServer;
     var number = req.body.numberServer;
     
-    // Faça as validações dos valores
     if (cnpj == undefined) {
         res.status(400).send("Seu CNPJ está undefined!");
     } else if (fantasyName == undefined) {
@@ -113,7 +112,7 @@ function cadastrar(req, res) {
                         "\nHouve um erro ao realizar o cadastro! Erro: ",
                         erro.sqlMessage
                     );
-                    res.status(500).json(erro.sqlMessage);
+                    res.status(403).json(erro.sqlMessage);
                 }
             );
     }
@@ -164,7 +163,8 @@ function validarcnpj(req, res) {
         );
     }
 }
-async function salvarUsuario(req, res) { 
+async function salvarUsuario(req, res) {
+    console.log(req.body, "corpo da requisição do atualizar") 
     var nome = req.body.nomeServer;
     var cpf = req.body.cpfServer;
     var telefone = req.body.telefoneServer;
@@ -181,12 +181,8 @@ async function salvarUsuario(req, res) {
         res.status(400).send("Seu cargo está undefined!");
     } else {
         await usuarioModel.salvarUsuario(nome, cpf, telefone, cargo, idUsuario)
-            .then(function (resultado) {
-                if (resultado.affectedRows > 0) {
-                    res.status(200).send('OK')
-                } else {
-                    res.status(404).json('Não foi possivel localizar o ID do usuario informado');
-                }
+            .then(function () {
+                res.status(200).send('OK')
             }).catch(
                 function (erro) {
                     console.log(erro);
@@ -213,12 +209,8 @@ async function salvarShopping(req, res) {
     }
      else {
         await usuarioModel.salvarShopping(razao_social, nome_fantasia, cnpj, idShopping)
-            .then(function (resultado) {
-                if (resultado.affectedRows > 0) {
-                    res.status(200).send('OK')
-                } else {
-                    res.status(404).json('Não foi possivel localizar o ID do usuario informado');
-                }
+            .then(function () {
+                res.status(200).send('OK')
             }).catch(
                 function (erro) {
                     console.log(erro);

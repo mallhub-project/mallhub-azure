@@ -1,6 +1,7 @@
 let proximaAtualizacao;
 
-window.onload = obterDadosGrafico(1);
+var id_shopping = sessionStorage.ID_SHOPPING
+window.onload = obterDadosGrafico(id_shopping);
 
 function obterDadosGrafico(id_shopping) {
   if (proximaAtualizacao != undefined) {
@@ -10,7 +11,7 @@ function obterDadosGrafico(id_shopping) {
   fetch(`/medidas/ultimas/${id_shopping}`).then(function (response) {
     if (response.ok) {
       response.json().then(function (resposta) {
-        fetch(`/medidas/buscar-mes?idShopping=1&dataInicial=2022-06-01&dataFinal=2022-06-30`)
+        fetch(`/medidas/buscar-mes?idShopping=${id_shopping}&dataInicial=2022-06-01&dataFinal=2022-06-30`)
           .then(data => data.json())
           .then((data) => {
             plotarGrafico(resposta, id_shopping, data[0].TotalPessoas);
@@ -145,11 +146,13 @@ function atualizarGrafico(id_shopping, data, myChart, data2, myChart2) {
       response.json().then(function (novoRegistro) {
 
         console.log("novo registro do tempo real", novoRegistro)
-
+        
         data.datasets[0].data.length > 6 ? data.datasets[0].data.shift() : null
         data.datasets[0].data.push(novoRegistro[0].TotalPessoas * 10);
+
         data.datasets[1].data.length > 6 ? data.datasets[1].data.shift() : null
         data.datasets[1].data.push(novoRegistro[1].TotalPessoas * 200);
+
         data.datasets[2].data.length > 6 ? data.datasets[2].data.shift() : null
         data.datasets[2].data.push(novoRegistro[2].TotalPessoas * 1200);
 
@@ -164,7 +167,7 @@ function atualizarGrafico(id_shopping, data, myChart, data2, myChart2) {
       console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
     });
 
-  fetch(`/medidas/buscar-mes?idShopping=1&dataInicial=2022-06-01&dataFinal=2022-06-30`)
+  fetch(`/medidas/buscar-mes?idShopping=${id_shopping}&dataInicial=2022-06-01&dataFinal=2022-06-30`)
     .then(data => data.json())
     .then((novoRegistro) => {
       data2.datasets[0].data[5] = novoRegistro[0].TotalPessoas
