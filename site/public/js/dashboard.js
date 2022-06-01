@@ -915,7 +915,7 @@ async function showAlertaDashboard() {
   qtd_dispositivo_alerta.innerHTML = conta
   qtd_dispositivo_ideal.innerHTML = dispositivo_bom + dispositivo_otimo + dispositivo_ideal
 
-  validarAlerta = setInterval(() => showAlertaDashboard(), 10000);
+  validarAlerta = setInterval(() => showAlertaDashboard(), 300000);
 }
 
 function exibirAlerta() {
