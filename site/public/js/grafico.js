@@ -148,10 +148,10 @@ function atualizarGrafico(id_shopping, data, myChart, data2, myChart2) {
         console.log("novo registro do tempo real", novoRegistro)
         
         data.datasets[0].data.length > 6 ? data.datasets[0].data.shift() : null
-        data.datasets[0].data.push(novoRegistro[0].TotalPessoas * 10);
+        data.datasets[0].data.push(novoRegistro[0].TotalPessoas * 100);
 
         data.datasets[1].data.length > 6 ? data.datasets[1].data.shift() : null
-        data.datasets[1].data.push(novoRegistro[1].TotalPessoas * 200);
+        data.datasets[1].data.push(novoRegistro[1].TotalPessoas * 3);
 
         data.datasets[2].data.length > 6 ? data.datasets[2].data.shift() : null
         data.datasets[2].data.push(novoRegistro[2].TotalPessoas * 1200);

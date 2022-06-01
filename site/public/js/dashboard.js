@@ -838,10 +838,11 @@ function quantidadeDispositivo() {
 
 var lista_de_dispositivo = []
 
-
 let validarAlerta;
 
 async function showAlertaDashboard() {
+  lista_de_dispositivo = []
+  
   var dispositivo_critico = 0
   var dispositivo_alerta = 0
   var dispositivo_ideal = 0
@@ -852,7 +853,15 @@ async function showAlertaDashboard() {
   await fetch(`/aviso/listar-metricas?idShopping=${id_shopping}`)
     .then(data => data.json()).then((data) => {
       if (data.length) {
-        lista_de_dispositivo = data
+        for (let index = 0; index < data.length; index++) {
+          if (index == 0) {
+            lista_de_dispositivo.push((data[index].totalPessoas) * 3)
+          } else if (index == 1) {
+            lista_de_dispositivo.push((data[index].totalPessoas) * 100)
+          } else {
+            lista_de_dispositivo.push((data[index].totalPessoas) * 1200)
+          }
+        }
       }
     }).catch(function (e) {
       console.log(e)
@@ -863,19 +872,19 @@ async function showAlertaDashboard() {
       var fk_dispositivo = lista_de_dispositivo[posicao].id_dispositivo
       var fk_tipoAlerta = 0
 
-      if (lista_de_dispositivo[posicao].totalPessoas >= 3000) {
+      if (lista_de_dispositivo[posicao] >= 3000) {
         dispositivo_otimo += 1
         fk_tipoAlerta = 3
-      } else if (lista_de_dispositivo[posicao].totalPessoas >= 2000) {
+      } else if (lista_de_dispositivo[posicao] >= 2000) {
         dispositivo_bom += 1
         fk_tipoAlerta = 3
-      } else if (lista_de_dispositivo[posicao].totalPessoas >= 1000) {
+      } else if (lista_de_dispositivo[posicao] >= 1000) {
         dispositivo_ideal += 1
         fk_tipoAlerta = 2
-      } else if (lista_de_dispositivo[posicao].totalPessoas < 800) {
+      } else if (lista_de_dispositivo[posicao] < 800) {
         dispositivo_alerta += 1
         fk_tipoAlerta = 1
-      } else if (lista_de_dispositivo[posicao].totalPessoas < 500) {
+      } else if (lista_de_dispositivo[posicao] < 500) {
         dispositivo_critico += 1
         fk_tipoAlerta = 1
       }
@@ -906,7 +915,7 @@ async function showAlertaDashboard() {
   qtd_dispositivo_alerta.innerHTML = conta
   qtd_dispositivo_ideal.innerHTML = dispositivo_bom + dispositivo_otimo + dispositivo_ideal
 
-  validarAlerta = setInterval(() => showAlertaDashboard(), 900000);
+  validarAlerta = setInterval(() => showAlertaDashboard(), 10000);
 }
 
 function exibirAlerta() {
